@@ -19,6 +19,7 @@
   <textarea id="editor" spellcheck="false"></textarea>
   <div id="controls">
     <button id="run">Run</button>
+    <button id="format">Format Code</button>
     <button id="sample">Insert Sample</button>
     <span id="status"></span>
   </div>
@@ -47,7 +48,9 @@
     Promise.all([
       loadScript('vendor/babel.min.js', 'https://unpkg.com/@babel/standalone/babel.min.js'),
       loadScript('vendor/react.development.js', 'https://unpkg.com/react@latest/umd/react.development.js'),
-      loadScript('vendor/react-dom.development.js', 'https://unpkg.com/react-dom@latest/umd/react-dom.development.js')
+      loadScript('vendor/react-dom.development.js', 'https://unpkg.com/react-dom@latest/umd/react-dom.development.js'),
+      loadScript('vendor/prettier.standalone.js', 'https://unpkg.com/prettier@3.0.3/standalone.js'),
+      loadScript('vendor/prettier.parser-babel.js', 'https://unpkg.com/prettier@3.0.3/parser-babel.js')
     ]).then(() => {
       // Load panel.js after dependencies are loaded
       const script = document.createElement('script');

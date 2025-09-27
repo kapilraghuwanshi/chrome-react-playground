@@ -1,6 +1,6 @@
 // Create React Playground panel
 chrome.devtools.panels.create(
-    'React Playground',
+    'React Playground DevTools',
     '',
     'panel.html',
     (panel) => {

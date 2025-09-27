@@ -1,8 +1,35 @@
 const editor = document.getElementById('editor');
 const runBtn = document.getElementById('run');
+const formatBtn = document.getElementById('format');
 const sampleBtn = document.getElementById('sample');
 const status = document.getElementById('status');
 const iframeWrap = document.getElementById('iframeWrap');
+
+// Format code using Prettier
+function formatCode() {
+    try {
+        const code = editor.value;
+        const formatted = prettier.format(code, {
+            parser: "babel",
+            plugins: prettierPlugins,
+            semi: true,
+            singleQuote: true,
+            trailingComma: "all",
+            printWidth: 80,
+            tabWidth: 2,
+            bracketSpacing: true,
+            jsxBracketSameLine: false,
+        });
+        editor.value = formatted;
+        status.textContent = 'Code formatted';
+    } catch (err) {
+        console.error('Formatting failed:', err);
+        status.textContent = 'Formatting failed: ' + err.message;
+    }
+}
+
+// Add format button handler
+formatBtn.onclick = formatCode;
 
 // Check dependency versions and sources
 async function checkVersions() {
