@@ -2,14 +2,18 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" 
+        content="default-src 'self';
+                 script-src 'self' 'unsafe-eval' https://cdn.skypack.dev https://unpkg.com;
+                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                 connect-src 'self' https://cdn.skypack.dev https://unpkg.com;
+                 img-src 'self' data: https:;
+                 worker-src 'self' blob:;
+                 frame-src 'self' data:;
+                 font-src 'self' data: https://fonts.gstatic.com;" />
   <title>React Playground DevTools</title>
   <!-- CodeMirror 6 core and essential packages -->
-  <script type="module">
-    import { EditorView, basicSetup } from "https://cdn.skypack.dev/@codemirror/basic-setup"
-    import { EditorState } from "https://cdn.skypack.dev/@codemirror/state"
-    import { javascript } from "https://cdn.skypack.dev/@codemirror/lang-javascript"
-    import { oneDark } from "https://cdn.skypack.dev/@codemirror/theme-one-dark"
-  </script>
+  <script type="module" src="editor-setup.js"></script>
   <style>
     :root {
       --bg-primary: #282c34;
@@ -210,9 +214,9 @@
 </head>
 <body>
   <div class="header-container">
-    <h3>React Playground (DevTools)</h3>
+    <h3>React Playground DevTools</h3>
     <div class="creator-badge">
-      Built by <a href="https://github.com/kapilraghuwanshi" target="_blank">Tech Monk-Kapil</a>
+      Built by <a href="https://www.linkedin.com/in/kapilraghuwanshi/" target="_blank">Tech Monk-Kapil</a>
     </div>
   </div>
   <div id="editor"></div>

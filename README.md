@@ -1,6 +1,7 @@
 # React ## ✨ Features
 
 ### 🎯 Core Features
+
 - Live React component playground in Chrome DevTools
 - Real-time JSX compilation with Babel
 - Local and CDN dependency support
@@ -9,6 +10,7 @@
 - Sandboxed execution environment
 
 ### 🎨 New UI Features
+
 - Professional VS Code-like code editor (CodeMirror 6)
 - One Dark Pro theme for better coding experience
 - Syntax highlighting for JSX/React
@@ -18,6 +20,7 @@
 - Code formatting support
 
 ### ⚡ Enhanced Experience
+
 - Available in regular DevTools and New Tab
 - Custom React components playground theme
 - Format code button for clean code
@@ -26,6 +29,7 @@
 - Responsive preview window
 
 ### 🛠️ Developer Experience
+
 - Code folding support
 - Multiple font options (JetBrains Mono, Fira Code)
 - Customizable tab size
@@ -87,15 +91,18 @@ Built with ❤️ by [Tech Monk-Kapil](https://github.com/kapilraghuwanshi)
 ## 🚀 Installation
 
 1. Clone this repository or download ZIP
+
 ```bash
 git clone https://github.com/yourusername/react-playground-devtools.git
 ```
 
 2. Open Chrome Extensions page
+
    - Navigate to `chrome://extensions/`
    - Or use Menu → More Tools → Extensions
 
 3. Enable Developer Mode
+
    - Toggle switch in top right corner
 
 4. Load the Extension
@@ -105,16 +112,19 @@ git clone https://github.com/yourusername/react-playground-devtools.git
 ## 📝 Usage
 
 1. Access the Playground
+
    - Open Chrome DevTools (F12 or Cmd+Opt+I)
    - Click on "React Playground" tab
    - Or use "New Tab" version
 
 2. Write React Components
+
    - Use professional code editor
    - Real-time JSX compilation
    - Syntax highlighting support
 
 3. Preview Changes
+
    - See live updates in preview pane
    - Error feedback in real-time
    - Format code with one click
@@ -175,6 +185,7 @@ DevTools Panel → JSX Editor → Babel Compilation → Sandboxed iframe → Iso
 ## 🛠️ Development
 
 ### Built With
+
 - 🔧 Chrome Extension APIs (Manifest V3)
 - ⚛️ React & ReactDOM (Latest versions)
 - 🎯 Babel Standalone for JSX compilation
@@ -184,6 +195,7 @@ DevTools Panel → JSX Editor → Babel Compilation → Sandboxed iframe → Iso
 - 🌐 Local/CDN dependency management
 
 ### Editor Features
+
 - Syntax highlighting (JSX/React)
 - Code folding
 - Auto-indentation
@@ -196,6 +208,7 @@ DevTools Panel → JSX Editor → Babel Compilation → Sandboxed iframe → Iso
 - Format on demand
 
 ### Security
+
 - Sandboxed code execution
 - Secure dependency loading
 - Error boundary implementation
@@ -208,6 +221,7 @@ MIT License - see [LICENSE](LICENSE) file
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to:
+
 - Report bugs
 - Suggest features
 - Submit pull requests
