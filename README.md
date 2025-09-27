@@ -1,6 +1,8 @@
 # React Playground DevTools
 
-A Chrome DevTools extension that provides a live React playground for experimenting with React components directly in your browser's developer tools.
+A Chrome DevTools extension that provides a secure, sandboxed React playground for experimenting with React components directly in your browser's developer tools. Write, compile, and test React components in an isolated environment without affecting the inspected page.
+
+Built with ❤️ by [Tech Monk-Kapil](https://github.com/kapilraghuwanshi)
 
 ## Features
 
@@ -10,6 +12,42 @@ A Chrome DevTools extension that provides a live React playground for experiment
 - Offline-first with CDN fallback
 - Automatic dependency version checking
 - Sandboxed execution environment
+
+### ✅ What's Allowed
+
+- Writing and testing React components in an isolated sandbox
+- Real-time JSX compilation within the DevTools panel
+- Rendering components in a secure, sandboxed iframe
+- Local dependency usage with CDN fallback
+- Version checking and dependency management
+
+### ❌ What's Not Allowed
+
+- Direct code injection into visited websites
+- Access to the main page's DOM or JavaScript context
+- Execution of arbitrary code outside the sandbox
+- Access to sensitive browser APIs without justification
+- Collection or transmission of user code or data
+
+### 🔒 Security Features
+
+1. **Sandboxed Execution**:
+
+   - All code runs in an isolated iframe
+   - No access to the parent window or main page
+   - Prevents interference with visited sites
+
+2. **Safe Compilation Process**:
+
+   ```
+   User Input (JSX) → Babel Compilation → Sandboxed Execution → Isolated Render
+   ```
+
+3. **Dependency Management**:
+   - Local vendor files for offline security
+   - Controlled CDN fallback
+   - Version consistency enforcement
+   - No arbitrary package loading
 
 ## Installation
 
@@ -33,15 +71,57 @@ A Chrome DevTools extension that provides a live React playground for experiment
 4. Click "Run" to see it render
 5. Use "Insert Sample" for a quick demo component
 
-## Dependencies
+## Dependencies and Security
+
+### Core Dependencies
 
 - React (local + CDN fallback)
 - React DOM (local + CDN fallback)
 - Babel Standalone (local + CDN fallback)
 
+### Dependency Security
+
+- **Offline-First**: Local vendor files ensure security and reliability
+- **Version Control**: Strict version management prevents unexpected updates
+- **Controlled Updates**: Manual verification of new dependency versions
+- **CDN Fallback**: Secure HTTPS connections to trusted CDNs only
+- **Integrity Checks**: SHA-384 hash verification for CDN resources
+
+## Technical Architecture
+
+### Component Flow
+
+```
+DevTools Panel → JSX Editor → Babel Compilation → Sandboxed iframe → Isolated Rendering
+```
+
+### Security Layers
+
+1. **Input Layer** (DevTools Panel)
+
+   - User writes JSX in isolated editor
+   - No access to main page context
+
+2. **Compilation Layer** (In-Memory)
+
+   - Babel transforms JSX to JS
+   - Runs in DevTools context
+   - No persistent storage of code
+
+3. **Execution Layer** (Sandbox)
+
+   - Isolated iframe environment
+   - No host page access
+   - Limited DOM permissions
+
+4. **Rendering Layer** (Contained)
+   - Components render in sandbox only
+   - No external DOM manipulation
+   - Clean unmount on updates
+
 ## Development
 
-The extension uses a modular structure:
+The extension uses a security-focused modular structure:
 
 - `manifest.json` - Extension configuration
 - `devtools.html/js` - DevTools integration
@@ -62,38 +142,3 @@ This project is licensed under the terms specified in the [LICENSE](LICENSE) fil
 5. Open a Pull Request
 
 # chrome-react-playground
-
-Custom Chrome DevTools panel that behaves like a mini JSX/React playground
-
-But downloading and including it in your vendor directory is the most reliable approach since:
-
-It works offline
-Ensures version consistency
-Makes the extension self-contained
-Prevents issues with CDN availability
-
-Local Sandbox Execution
-
-Instead of injecting user code into any website, you create an isolated sandboxed iframe inside your DevTools panel.
-
-The React code is compiled (using something like Babel standalone) and rendered only inside that sandbox, not inside other websites.
-
-This way, you’re not tampering with the host page → much safer.
-
-🔑 Safer Architecture for Approval
-
-DevTools panel → user writes JSX.
-
-Compile JSX → JS using Babel (in-memory).
-
-Run inside iframe sandbox (not touching the visited site).
-
-Render React component into that iframe’s DOM.
-
-What is not allowed?
-
-If your extension executes arbitrary JSX directly into the current page context (like eval inside user’s visited site).
-
-If it tries to access sensitive APIs without justification.
-
-If it doesn’t clearly declare what happens with user-provided code.
