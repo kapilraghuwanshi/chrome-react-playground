@@ -1,8 +1,36 @@
 <!doctype html>
 <html>
-<head><meta charset="utf-8"></head>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" 
+        content="default-src 'self';
+                 script-src 'self' 'unsafe-eval';
+                 style-src 'self' 'unsafe-inline';
+                 connect-src 'none';
+                 object-src 'none';
+                 base-uri 'none';" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #282c34;
+      color: #abb2bf;
+    }
+    #root {
+      padding: 12px;
+      font-family: -apple-system, system-ui, sans-serif;
+    }
+    .error {
+      color: #e06c75;
+      padding: 8px;
+      margin: 8px 0;
+      border-left: 3px solid #e06c75;
+      background: rgba(224, 108, 117, 0.1);
+    }
+  </style>
+</head>
 <body>
-  <div id="root" style="padding:6px; font-family:sans-serif"></div>
+  <div id="root"></div>
   <script src="vendor/react.development.js"></script>
   <script src="vendor/react-dom.development.js"></script>
   <script src="iframe.js"></script>

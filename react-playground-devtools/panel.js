@@ -2,17 +2,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Dynamically import CodeMirror modules
-        const [
-            { EditorView, basicSetup },
-            { EditorState },
-            { javascript },
-            { oneDark }
-        ] = await Promise.all([
-            import("https://cdn.skypack.dev/@codemirror/basic-setup"),
-            import("https://cdn.skypack.dev/@codemirror/state"),
-            import("https://cdn.skypack.dev/@codemirror/lang-javascript"),
-            import("https://cdn.skypack.dev/@codemirror/theme-one-dark")
-        ]);
+        const { EditorView, basicSetup, EditorState, javascript, oneDark } = await import('./codemirror.bundle.js');
 
         // Initialize CodeMirror editor
         let view = new EditorView({
