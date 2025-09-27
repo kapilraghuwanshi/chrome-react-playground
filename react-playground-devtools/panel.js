@@ -1,8 +1,17 @@
+// Get references to DOM elements
+const formatBtn = document.getElementById('format');
+const sampleBtn = document.getElementById('sample');
+const runBtn = document.getElementById('run');
+const status = document.getElementById('status');
+const iframeWrap = document.getElementById('iframeWrap');
+
+let view; // Define view in outer scope
+
 // Initialize CodeMirror editor
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Dynamically import CodeMirror modules
-        const { EditorView, basicSetup, EditorState, javascript, oneDark } = await import('./codemirror.bundle.js');
+        const { EditorView, basicSetup, EditorState, javascript, oneDark } = await import('./lib/codemirror-bundle.js');
 
         // Initialize CodeMirror editor
         let view = new EditorView({
@@ -41,85 +50,95 @@ export default function App() {
             }),
             parent: document.getElementById("editor")
         });
-
         // Make editor instance available globally
         window.editor = view;
 
-        // Format code using Prettier
-        function formatCode() {
-            try {
-                const code = editor.value;
-                const formatted = prettier.format(code, {
-                    parser: "babel",
-                    plugins: prettierPlugins,
-                    semi: true,
-                    singleQuote: true,
-                    trailingComma: "all",
-                    printWidth: 80,
-                    tabWidth: 2,
-                    bracketSpacing: true,
-                    jsxBracketSameLine: false,
-                });
-                editor.value = formatted;
-                status.textContent = 'Code formatted';
-            } catch (err) {
-                console.error('Formatting failed:', err);
-                status.textContent = 'Formatting failed: ' + err.message;
-            }
-        }
+        // Focus the editor
+        view.focus();
 
-        // Add format button handler
-        formatBtn.onclick = formatCode;
+        // Set up status message
+        status.textContent = 'Editor ready';
+    } catch (err) {
+        console.error('Initialization failed:', err);
+        status.textContent = 'Failed to initialize editor: ' + err.message;
+    }
+});
 
-        // Check dependency versions and sources
-        async function checkVersions() {
-            try {
-                // Determine if we're using local or CDN versions
-                const isUsingLocal = {
-                    babel: !Babel.version.includes('latest'),
-                    react: !React.version.includes('latest')
-                };
+// Format code using Prettier
+function formatCode() {
+    try {
+        const code = editor.value;
+        const formatted = prettier.format(code, {
+            parser: "babel",
+            plugins: prettierPlugins,
+            semi: true,
+            singleQuote: true,
+            trailingComma: "all",
+            printWidth: 80,
+            tabWidth: 2,
+            bracketSpacing: true,
+            jsxBracketSameLine: false,
+        });
+        editor.value = formatted;
+        status.textContent = 'Code formatted';
+    } catch (err) {
+        console.error('Formatting failed:', err);
+        status.textContent = 'Formatting failed: ' + err.message;
+    }
+}
 
-                // Get latest versions from npm
-                const [babelRes, reactRes] = await Promise.all([
-                    fetch('https://registry.npmjs.org/@babel/standalone/latest'),
-                    fetch('https://registry.npmjs.org/react/latest')
-                ]);
-                const babelData = await babelRes.json();
-                const reactData = await reactRes.json();
+// Add format button handler
+formatBtn.onclick = formatCode;
 
-                // Current versions
-                const currentBabel = Babel.version;
-                const currentReact = React.version;
+// Check dependency versions and sources
+async function checkVersions() {
+    try {
+        // Determine if we're using local or CDN versions
+        const isUsingLocal = {
+            babel: !Babel.version.includes('latest'),
+            react: !React.version.includes('latest')
+        };
 
-                // Prepare status message
-                const statusParts = [];
+        // Get latest versions from npm
+        const [babelRes, reactRes] = await Promise.all([
+            fetch('https://registry.npmjs.org/@babel/standalone/latest'),
+            fetch('https://registry.npmjs.org/react/latest')
+        ]);
+        const babelData = await babelRes.json();
+        const reactData = await reactRes.json();
 
-                // Add source information
-                statusParts.push(`Using ${isUsingLocal.babel ? 'local' : 'CDN'} Babel`);
-                statusParts.push(`Using ${isUsingLocal.react ? 'local' : 'CDN'} React`);
+        // Current versions
+        const currentBabel = Babel.version;
+        const currentReact = React.version;
 
-                // Check for updates
-                if (babelData.version !== currentBabel || reactData.version !== currentReact) {
-                    console.log(`Updates available:
+        // Prepare status message
+        const statusParts = [];
+
+        // Add source information
+        statusParts.push(`Using ${isUsingLocal.babel ? 'local' : 'CDN'} Babel`);
+        statusParts.push(`Using ${isUsingLocal.react ? 'local' : 'CDN'} React`);
+
+        // Check for updates
+        if (babelData.version !== currentBabel || reactData.version !== currentReact) {
+            console.log(`Updates available:
                 Babel ${currentBabel} → ${babelData.version} (${isUsingLocal.babel ? 'local' : 'CDN'})
                 React ${currentReact} → ${reactData.version} (${isUsingLocal.react ? 'local' : 'CDN'})
             `);
-                    statusParts.push('Updates available');
-                }
-
-                status.textContent = statusParts.join(' | ');
-            } catch (err) {
-                console.error('Version check failed:', err);
-                status.textContent = 'Using offline versions';
-            }
+            statusParts.push('Updates available');
         }
 
-        // Check versions when the panel loads
-        setTimeout(checkVersions, 1000); // Slight delay to ensure dependencies are loaded
+        status.textContent = statusParts.join(' | ');
+    } catch (err) {
+        console.error('Version check failed:', err);
+        status.textContent = 'Using offline versions';
+    }
+}
 
-        const SAMPLES = {
-            counter: `export default function Counter() {
+// Check versions when the panel loads
+setTimeout(checkVersions, 1000); // Slight delay to ensure dependencies are loaded
+
+const SAMPLES = {
+    counter: `export default function Counter() {
   const [count, setCount] = React.useState(0);
   return (
     <div style={{ padding: '20px', fontFamily: 'system-ui' }}>
@@ -140,7 +159,7 @@ export default function App() {
     </div>
   );
 }`,
-            todo: `export default function TodoList() {
+    todo: `export default function TodoList() {
   const [todos, setTodos] = React.useState([]);
   const [input, setInput] = React.useState('');
 
@@ -213,80 +232,80 @@ export default function App() {
     </div>
   );
 }`
-        };
+};
 
-        let currentSampleIndex = 0;
-        const samplesList = Object.values(SAMPLES);
+let currentSampleIndex = 0;
+const samplesList = Object.values(SAMPLES);
 
-        sampleBtn.onclick = () => {
-            try {
-                // Get the next sample in rotation
-                const sample = samplesList[currentSampleIndex];
+sampleBtn.onclick = () => {
+    try {
+        // Get the next sample in rotation
+        const sample = samplesList[currentSampleIndex];
 
-                // Create a transaction to replace the entire content
-                let transaction = view.state.update({
-                    changes: {
-                        from: 0,
-                        to: view.state.doc.length,
-                        insert: sample
-                    }
-                });
-
-                // Apply the transaction
-                view.dispatch(transaction);
-
-                // Move to next sample for next click
-                currentSampleIndex = (currentSampleIndex + 1) % samplesList.length;
-
-                // Focus the editor
-                view.focus();
-
-                // Update status
-                status.textContent = 'Sample code inserted!';
-            } catch (err) {
-                console.error('Failed to insert sample:', err);
-                status.textContent = 'Failed to insert sample code';
-            }
-        };        // Create sandboxed iframe (no allow-same-origin -> stricter isolation)
-        const iframe = document.createElement('iframe');
-        iframe.id = 'playground_iframe';
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.sandbox = 'allow-scripts'; // allow scripts only
-        // set src to packaged iframe page via runtime URL
-        iframe.src = chrome.runtime.getURL('iframe.html');
-        iframeWrap.appendChild(iframe);
-
-        // helper to send code to iframe
-        function postToIframe(message) {
-            // targetOrigin set to chrome-extension origin for safety
-            const targetOrigin = new URL(iframe.src).origin;
-            iframe.contentWindow.postMessage(message, targetOrigin);
-        }
-
-        runBtn.onclick = () => {
-            status.textContent = 'Compiling...';
-            try {
-                const userCode = editor.value || '';
-                // Transform JSX -> JS (ES module style). We keep 'presets: ["react"]'.
-                const res = Babel.transform(userCode, { presets: ['react'] });
-                const compiled = res.code;
-
-                // Send compiled code to iframe for execution
-                postToIframe({ type: 'RUN_COMPILED', compiled });
-
-                status.textContent = 'Sent to sandbox.';
-            } catch (e) {
-                console.error(e);
-                status.textContent = 'Compile error: ' + e.message;
-            }
-        };
-
-        // Optional: show errors posted back from iframe
-        window.addEventListener('message', (ev) => {
-            // ensure message from our iframe origin
-            if (ev.source === iframe.contentWindow && ev.data && ev.data.type) {
-                if (ev.data.type === 'EXEC_SUCCESS') status.textContent = 'Executed OK';
-                if (ev.data.type === 'EXEC_ERROR') status.textContent = 'Runtime error: ' + ev.data.error;
+        // Create a transaction to replace the entire content
+        let transaction = view.state.update({
+            changes: {
+                from: 0,
+                to: view.state.doc.length,
+                insert: sample
             }
         });
+
+        // Apply the transaction
+        view.dispatch(transaction);
+
+        // Move to next sample for next click
+        currentSampleIndex = (currentSampleIndex + 1) % samplesList.length;
+
+        // Focus the editor
+        view.focus();
+
+        // Update status
+        status.textContent = 'Sample code inserted!';
+    } catch (err) {
+        console.error('Failed to insert sample:', err);
+        status.textContent = 'Failed to insert sample code';
+    }
+};        // Create sandboxed iframe (no allow-same-origin -> stricter isolation)
+const iframe = document.createElement('iframe');
+iframe.id = 'playground_iframe';
+iframe.style.width = '100%';
+iframe.style.height = '100%';
+iframe.sandbox = 'allow-scripts'; // allow scripts only
+// set src to packaged iframe page via runtime URL
+iframe.src = chrome.runtime.getURL('iframe.html');
+iframeWrap.appendChild(iframe);
+
+// helper to send code to iframe
+function postToIframe(message) {
+    // targetOrigin set to chrome-extension origin for safety
+    const targetOrigin = new URL(iframe.src).origin;
+    iframe.contentWindow.postMessage(message, targetOrigin);
+}
+
+runBtn.onclick = () => {
+    status.textContent = 'Compiling...';
+    try {
+        const userCode = editor.value || '';
+        // Transform JSX -> JS (ES module style). We keep 'presets: ["react"]'.
+        const res = Babel.transform(userCode, { presets: ['react'] });
+        const compiled = res.code;
+
+        // Send compiled code to iframe for execution
+        postToIframe({ type: 'RUN_COMPILED', compiled });
+
+        status.textContent = 'Sent to sandbox.';
+    } catch (e) {
+        console.error(e);
+        status.textContent = 'Compile error: ' + e.message;
+    }
+};
+
+// Optional: show errors posted back from iframe
+window.addEventListener('message', (ev) => {
+    // ensure message from our iframe origin
+    if (ev.source === iframe.contentWindow && ev.data && ev.data.type) {
+        if (ev.data.type === 'EXEC_SUCCESS') status.textContent = 'Executed OK';
+        if (ev.data.type === 'EXEC_ERROR') status.textContent = 'Runtime error: ' + ev.data.error;
+    }
+});

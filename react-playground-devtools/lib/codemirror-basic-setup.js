@@ -1,12 +1,12 @@
-import { lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine, keymap } from '@codemirror/view';
-export { EditorView } from '@codemirror/view';
-import { EditorState } from '@codemirror/state';
-export { EditorState } from '@codemirror/state';
-import { foldGutter, indentOnInput, syntaxHighlighting, defaultHighlightStyle, bracketMatching, foldKeymap } from '@codemirror/language';
-import { history, defaultKeymap, historyKeymap } from '@codemirror/commands';
-import { highlightSelectionMatches, searchKeymap } from '@codemirror/search';
-import { closeBrackets, autocompletion, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete';
-import { lintKeymap } from '@codemirror/lint';
+import { lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine, keymap } from './codemirror-view.js';
+export { EditorView } from './codemirror-view.js';
+import { EditorState } from './codemirror-state.js';
+export { EditorState } from './codemirror-state.js';
+import { foldGutter, indentOnInput, syntaxHighlighting, defaultHighlightStyle, bracketMatching, foldKeymap } from './codemirror-language.js';
+import { history, defaultKeymap, historyKeymap } from './codemirror-commands.js';
+import { highlightSelectionMatches, searchKeymap } from './codemirror-search.js';
+import { closeBrackets, autocompletion, closeBracketsKeymap, completionKeymap } from './codemirror-autocomplete.js';
+import { lintKeymap } from './codemirror-lint.js';
 
 /**
 This is an extension value that just pulls together a number of
@@ -64,14 +64,14 @@ const basicSetup = [
     /*@__PURE__*/highlightActiveLine(),
     /*@__PURE__*/highlightSelectionMatches(),
     /*@__PURE__*/keymap.of([
-        ...closeBracketsKeymap,
-        ...defaultKeymap,
-        ...searchKeymap,
-        ...historyKeymap,
-        ...foldKeymap,
-        ...completionKeymap,
-        ...lintKeymap
-    ])
+    ...closeBracketsKeymap,
+    ...defaultKeymap,
+    ...searchKeymap,
+    ...historyKeymap,
+    ...foldKeymap,
+    ...completionKeymap,
+    ...lintKeymap
+])
 ];
 
 export { basicSetup };

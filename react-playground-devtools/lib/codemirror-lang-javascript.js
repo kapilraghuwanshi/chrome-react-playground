@@ -1,9 +1,9 @@
-import { parser } from '@lezer/javascript';
-import { syntaxTree, LRLanguage, indentNodeProp, continuedIndent, flatIndent, delimitedIndent, foldNodeProp, foldInside, defineLanguageFacet, sublanguageProp, LanguageSupport } from '@codemirror/language';
-import { EditorSelection } from '@codemirror/state';
-import { EditorView } from '@codemirror/view';
-import { snippetCompletion, ifNotIn, completeFromList } from '@codemirror/autocomplete';
-import { NodeWeakMap, IterMode } from '@lezer/common';
+import { parser } from './lezer-javascript.js';
+import { syntaxTree, LRLanguage, indentNodeProp, continuedIndent, flatIndent, delimitedIndent, foldNodeProp, foldInside, defineLanguageFacet, sublanguageProp, LanguageSupport } from './codemirror-language.js';
+import { EditorSelection } from './codemirror-state.js';
+import { EditorView } from './codemirror-view.js';
+import { snippetCompletion, ifNotIn, completeFromList } from './codemirror-autocomplete.js';
+import { NodeWeakMap, IterMode } from './lezer-common.js';
 
 /**
 A collection of JavaScript-related
@@ -11,60 +11,60 @@ A collection of JavaScript-related
 */
 const snippets = [
     /*@__PURE__*/snippetCompletion("function ${name}(${params}) {\n\t${}\n}", {
-        label: "function",
-        detail: "definition",
-        type: "keyword"
-    }),
+    label: "function",
+    detail: "definition",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("for (let ${index} = 0; ${index} < ${bound}; ${index}++) {\n\t${}\n}", {
-        label: "for",
-        detail: "loop",
-        type: "keyword"
-    }),
+    label: "for",
+    detail: "loop",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("for (let ${name} of ${collection}) {\n\t${}\n}", {
-        label: "for",
-        detail: "of loop",
-        type: "keyword"
-    }),
+    label: "for",
+    detail: "of loop",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("do {\n\t${}\n} while (${})", {
-        label: "do",
-        detail: "loop",
-        type: "keyword"
-    }),
+    label: "do",
+    detail: "loop",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("while (${}) {\n\t${}\n}", {
-        label: "while",
-        detail: "loop",
-        type: "keyword"
-    }),
+    label: "while",
+    detail: "loop",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("try {\n\t${}\n} catch (${error}) {\n\t${}\n}", {
-        label: "try",
-        detail: "/ catch block",
-        type: "keyword"
-    }),
+    label: "try",
+    detail: "/ catch block",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("if (${}) {\n\t${}\n}", {
-        label: "if",
-        detail: "block",
-        type: "keyword"
-    }),
+    label: "if",
+    detail: "block",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("if (${}) {\n\t${}\n} else {\n\t${}\n}", {
-        label: "if",
-        detail: "/ else block",
-        type: "keyword"
-    }),
+    label: "if",
+    detail: "/ else block",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("class ${name} {\n\tconstructor(${params}) {\n\t\t${}\n\t}\n}", {
-        label: "class",
-        detail: "definition",
-        type: "keyword"
-    }),
+    label: "class",
+    detail: "definition",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("import {${names}} from \"${module}\"\n${}", {
-        label: "import",
-        detail: "named",
-        type: "keyword"
-    }),
+    label: "import",
+    detail: "named",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("import ${name} from \"${module}\"\n${}", {
-        label: "import",
-        detail: "default",
-        type: "keyword"
-    })
+    label: "import",
+    detail: "default",
+    type: "keyword"
+})
 ];
 /**
 A collection of snippet completions for TypeScript. Includes the
@@ -72,20 +72,20 @@ JavaScript [snippets](https://codemirror.net/6/docs/ref/#lang-javascript.snippet
 */
 const typescriptSnippets = /*@__PURE__*/snippets.concat([
     /*@__PURE__*/snippetCompletion("interface ${name} {\n\t${}\n}", {
-        label: "interface",
-        detail: "definition",
-        type: "keyword"
-    }),
+    label: "interface",
+    detail: "definition",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("type ${name} = ${type}", {
-        label: "type",
-        detail: "definition",
-        type: "keyword"
-    }),
+    label: "type",
+    detail: "definition",
+    type: "keyword"
+}),
     /*@__PURE__*/snippetCompletion("enum ${name} {\n\t${}\n}", {
-        label: "enum",
-        detail: "definition",
-        type: "keyword"
-    })
+    label: "enum",
+    detail: "definition",
+    type: "keyword"
+})
 ]);
 
 const cache = /*@__PURE__*/new NodeWeakMap();
@@ -110,8 +110,10 @@ const gatherCompletions = {
     EnumDeclaration: /*@__PURE__*/defID("constant"),
     TypeAliasDeclaration: /*@__PURE__*/defID("type"),
     NamespaceDeclaration: /*@__PURE__*/defID("namespace"),
-    VariableDefinition(node, def) { if (!node.matchContext(functionContext))
-        def(node, "variable"); },
+    VariableDefinition(node, def) {
+        if (!node.matchContext(functionContext))
+            def(node, "variable");
+    },
     TypeDefinition(node, def) { def(node, "type"); },
     __proto__: null
 };
@@ -178,7 +180,7 @@ function localCompletionSource(context) {
 function pathFor(read, member, name) {
     var _a;
     let path = [];
-    for (;;) {
+    for (; ;) {
         let obj = member.firstChild, prop;
         if ((obj === null || obj === void 0 ? void 0 : obj.name) == "VariableName") {
             path.push(read(obj));
@@ -227,7 +229,7 @@ function completionPath(context) {
 }
 function enumeratePropertyCompletions(obj, top) {
     let options = [], seen = new Set;
-    for (let depth = 0;; depth++) {
+    for (let depth = 0; ; depth++) {
         for (let name of (Object.getOwnPropertyNames || Object.keys)(obj)) {
             if (!/^[a-zA-Z_$\xaa-\uffdc][\w$\xaa-\uffdc]*$/.test(name) || seen.has(name))
                 continue;
@@ -291,33 +293,33 @@ const javascriptLanguage = /*@__PURE__*/LRLanguage.define({
     parser: /*@__PURE__*/parser.configure({
         props: [
             /*@__PURE__*/indentNodeProp.add({
-                IfStatement: /*@__PURE__*/continuedIndent({ except: /^\s*({|else\b)/ }),
-                TryStatement: /*@__PURE__*/continuedIndent({ except: /^\s*({|catch\b|finally\b)/ }),
-                LabeledStatement: flatIndent,
-                SwitchBody: context => {
-                    let after = context.textAfter, closed = /^\s*\}/.test(after), isCase = /^\s*(case|default)\b/.test(after);
-                    return context.baseIndent + (closed ? 0 : isCase ? 1 : 2) * context.unit;
-                },
-                Block: /*@__PURE__*/delimitedIndent({ closing: "}" }),
-                ArrowFunction: cx => cx.baseIndent + cx.unit,
-                "TemplateString BlockComment": () => null,
-                "Statement Property": /*@__PURE__*/continuedIndent({ except: /^{/ }),
-                JSXElement(context) {
-                    let closed = /^\s*<\//.test(context.textAfter);
-                    return context.lineIndent(context.node.from) + (closed ? 0 : context.unit);
-                },
-                JSXEscape(context) {
-                    let closed = /\s*\}/.test(context.textAfter);
-                    return context.lineIndent(context.node.from) + (closed ? 0 : context.unit);
-                },
-                "JSXOpenTag JSXSelfClosingTag"(context) {
-                    return context.column(context.node.from) + context.unit;
-                }
-            }),
+            IfStatement: /*@__PURE__*/continuedIndent({ except: /^\s*({|else\b)/ }),
+            TryStatement: /*@__PURE__*/continuedIndent({ except: /^\s*({|catch\b|finally\b)/ }),
+            LabeledStatement: flatIndent,
+            SwitchBody: context => {
+                let after = context.textAfter, closed = /^\s*\}/.test(after), isCase = /^\s*(case|default)\b/.test(after);
+                return context.baseIndent + (closed ? 0 : isCase ? 1 : 2) * context.unit;
+            },
+            Block: /*@__PURE__*/delimitedIndent({ closing: "}" }),
+            ArrowFunction: cx => cx.baseIndent + cx.unit,
+            "TemplateString BlockComment": () => null,
+            "Statement Property": /*@__PURE__*/continuedIndent({ except: /^{/ }),
+            JSXElement(context) {
+                let closed = /^\s*<\//.test(context.textAfter);
+                return context.lineIndent(context.node.from) + (closed ? 0 : context.unit);
+            },
+            JSXEscape(context) {
+                let closed = /\s*\}/.test(context.textAfter);
+                return context.lineIndent(context.node.from) + (closed ? 0 : context.unit);
+            },
+            "JSXOpenTag JSXSelfClosingTag"(context) {
+                return context.column(context.node.from) + context.unit;
+            }
+        }),
             /*@__PURE__*/foldNodeProp.add({
-                "Block ClassBody SwitchBody EnumBody ObjectExpression ArrayExpression ObjectType": foldInside,
-                BlockComment(tree) { return { from: tree.from + 2, to: tree.to - 2 }; }
-            })
+            "Block ClassBody SwitchBody EnumBody ObjectExpression ArrayExpression ObjectType": foldInside,
+            BlockComment(tree) { return { from: tree.from + 2, to: tree.to - 2 }; }
+        })
         ]
     }),
     languageData: {
@@ -371,7 +373,7 @@ function javascript(config = {}) {
     ]);
 }
 function findOpenTag(node) {
-    for (;;) {
+    for (; ;) {
         if (node.name == "JSXOpenTag" || node.name == "JSXSelfClosingTag" || node.name == "JSXFragmentTag")
             return node;
         if (node.name == "JSXEscape" || !node.parent)
@@ -403,7 +405,7 @@ const autoCloseTags = /*@__PURE__*/EditorView.inputHandler.of((view, from, to, t
         let { head } = range, around = syntaxTree(state).resolveInner(head - 1, -1), name;
         if (around.name == "JSXStartTag")
             around = around.parent;
-        if (state.doc.sliceString(head - 1, head) != text || around.name == "JSXAttributeValue" && around.to > head) ;
+        if (state.doc.sliceString(head - 1, head) != text || around.name == "JSXAttributeValue" && around.to > head);
         else if (text == ">" && around.name == "JSXFragmentTag") {
             return { range, changes: { from: head, insert: `</>` } };
         }
@@ -484,11 +486,11 @@ function translateDiagnostic(input, doc, offset) {
     if (input.fix) {
         let { range, text } = input.fix, from = range[0] + offset.pos - start, to = range[1] + offset.pos - start;
         result.actions = [{
-                name: "fix",
-                apply(view, start) {
-                    view.dispatch({ changes: { from: start + from, to: start + to, insert: text }, scrollIntoView: true });
-                }
-            }];
+            name: "fix",
+            apply(view, start) {
+                view.dispatch({ changes: { from: start + from, to: start + to, insert: text }, scrollIntoView: true });
+            }
+        }];
     }
     return result;
 }

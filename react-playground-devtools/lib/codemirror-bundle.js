@@ -1,5 +1,6 @@
 // Import and re-export CodeMirror modules
-import { EditorView, basicSetup } from './codemirror-basic-setup.js';
+import { EditorView } from './codemirror-view.js';
+import { basicSetup } from './codemirror-basic-setup.js';
 import { EditorState } from './codemirror-state.js';
 import { javascript } from './codemirror-lang-javascript.js';
 import { oneDark } from './codemirror-theme-one-dark.js';
