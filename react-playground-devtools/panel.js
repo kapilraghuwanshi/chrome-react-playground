@@ -37,7 +37,12 @@ export default function App() {
                     oneDark,
                     EditorView.lineWrapping,
                     EditorState.tabSize.of(2),
-                    EditorView.editorAttributes.of({ autoFocus: true }),
+                    EditorView.editable.of(true),
+                    EditorState.allowMultipleSelections.of(true),
+                    EditorView.focusChangeEffect.of(view => {
+                        view.focus();
+                        return null;
+                    }),
                     EditorView.theme({
                         "&": { height: "300px" },
                         ".cm-scroller": { overflow: "auto" }
@@ -224,27 +229,35 @@ export default function App() {
         const samplesList = Object.values(SAMPLES);
 
         sampleBtn.onclick = () => {
-            // Get the next sample in rotation
-            const sample = samplesList[currentSampleIndex];
-            
-            // Update editor content
-            const transaction = view.state.update({
-                changes: {
-                    from: 0,
-                    to: view.state.doc.length,
-                    insert: sample
-                }
-            });
-            view.dispatch(transaction);
+            try {
+                // Get the next sample in rotation
+                const sample = samplesList[currentSampleIndex];
 
-            // Move to next sample for next click
-            currentSampleIndex = (currentSampleIndex + 1) % samplesList.length;
-            
-            // Update status
-            status.textContent = 'Sample code inserted!';
-        };
+                // Create a transaction to replace the entire content
+                let transaction = view.state.update({
+                    changes: {
+                        from: 0,
+                        to: view.state.doc.length,
+                        insert: sample
+                    }
+                });
 
-        // Create sandboxed iframe (no allow-same-origin -> stricter isolation)
+                // Apply the transaction
+                view.dispatch(transaction);
+
+                // Move to next sample for next click
+                currentSampleIndex = (currentSampleIndex + 1) % samplesList.length;
+
+                // Focus the editor
+                view.focus();
+
+                // Update status
+                status.textContent = 'Sample code inserted!';
+            } catch (err) {
+                console.error('Failed to insert sample:', err);
+                status.textContent = 'Failed to insert sample code';
+            }
+        };        // Create sandboxed iframe (no allow-same-origin -> stricter isolation)
         const iframe = document.createElement('iframe');
         iframe.id = 'playground_iframe';
         iframe.style.width = '100%';
