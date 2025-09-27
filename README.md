@@ -1,10 +1,45 @@
-# React Playground DevTools
+# React ## ✨ Features
+
+### 🎯 Core Features
+- Live React component playground in Chrome DevTools
+- Real-time JSX compilation with Babel
+- Local and CDN dependency support
+- Offline-first with CDN fallback
+- Automatic dependency version checking
+- Sandboxed execution environment
+
+### 🎨 New UI Features
+- Professional VS Code-like code editor (CodeMirror 6)
+- One Dark Pro theme for better coding experience
+- Syntax highlighting for JSX/React
+- Line numbers and active line highlighting
+- Auto-indentation and bracket matching
+- Custom scrollbars and modern UI elements
+- Code formatting support
+
+### ⚡ Enhanced Experience
+- Available in regular DevTools and New Tab
+- Custom React components playground theme
+- Format code button for clean code
+- Sample React components with Hooks
+- Real-time error feedback
+- Responsive preview window
+
+### 🛠️ Developer Experience
+- Code folding support
+- Multiple font options (JetBrains Mono, Fira Code)
+- Customizable tab size
+- Line wrapping
+- Selection highlighting
+- Built-in error handlingnd DevTools
 
 A Chrome DevTools extension that provides a secure, sandboxed React playground for experimenting with React components directly in your browser's developer tools. Write, compile, and test React components in an isolated environment without affecting the inspected page.
 
 Built with ❤️ by [Tech Monk-Kapil](https://github.com/kapilraghuwanshi)
 
-## Features
+![React Playground DevTools](icons/icon128.png)
+
+## ✨ Features
 
 - Live React component playground in Chrome DevTools
 - Real-time JSX compilation
@@ -49,27 +84,45 @@ Built with ❤️ by [Tech Monk-Kapil](https://github.com/kapilraghuwanshi)
    - Version consistency enforcement
    - No arbitrary package loading
 
-## Installation
+## 🚀 Installation
 
-1. Clone this repository:
+1. Clone this repository or download ZIP
+```bash
+git clone https://github.com/yourusername/react-playground-devtools.git
+```
 
-   ```bash
-   git clone https://github.com/kapilraghuwanshi/chrome-react-playground.git
-   ```
+2. Open Chrome Extensions page
+   - Navigate to `chrome://extensions/`
+   - Or use Menu → More Tools → Extensions
 
-2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable Developer Mode
+   - Toggle switch in top right corner
 
-3. Enable "Developer mode" in the top right
+4. Load the Extension
+   - Click "Load unpacked extension..."
+   - Select the extension directory
 
-4. Click "Load unpacked" and select the `react-playground-devtools` directory
+## 📝 Usage
 
-## Usage
+1. Access the Playground
+   - Open Chrome DevTools (F12 or Cmd+Opt+I)
+   - Click on "React Playground" tab
+   - Or use "New Tab" version
 
-1. Open Chrome DevTools (F12 or Right-click > Inspect)
-2. Look for the "React Playground" tab
-3. Write your React component in the editor
-4. Click "Run" to see it render
-5. Use "Insert Sample" for a quick demo component
+2. Write React Components
+   - Use professional code editor
+   - Real-time JSX compilation
+   - Syntax highlighting support
+
+3. Preview Changes
+   - See live updates in preview pane
+   - Error feedback in real-time
+   - Format code with one click
+
+4. Manage Dependencies
+   - Add local/CDN dependencies
+   - Automatic version checking
+   - Offline-first functionality
 
 ## Dependencies and Security
 
@@ -119,19 +172,49 @@ DevTools Panel → JSX Editor → Babel Compilation → Sandboxed iframe → Iso
    - No external DOM manipulation
    - Clean unmount on updates
 
-## Development
+## 🛠️ Development
 
-The extension uses a security-focused modular structure:
+### Built With
+- 🔧 Chrome Extension APIs (Manifest V3)
+- ⚛️ React & ReactDOM (Latest versions)
+- 🎯 Babel Standalone for JSX compilation
+- 📝 CodeMirror 6 for professional editing
+- 🎨 VS Code One Dark Pro theme
+- 🔒 Sandboxed execution environment
+- 🌐 Local/CDN dependency management
 
-- `manifest.json` - Extension configuration
-- `devtools.html/js` - DevTools integration
-- `panel.html/js` - Playground UI and logic
-- `content.js` - Page integration
-- `vendor/` - Local dependency files
+### Editor Features
+- Syntax highlighting (JSX/React)
+- Code folding
+- Auto-indentation
+- Multiple font options
+- Line numbers
+- Active line highlight
+- Custom scrollbars
+- Selection highlighting
+- Error handling
+- Format on demand
 
-## License
+### Security
+- Sandboxed code execution
+- Secure dependency loading
+- Error boundary implementation
+- Safe preview rendering
 
-This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest features
+- Submit pull requests
+
+## 👨‍💻 Creator
+
+Created by [Your Name] with ❤️ for the React community
 
 ## Contributing
 

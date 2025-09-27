@@ -1,9 +1,53 @@
-const editor = document.getElementById('editor');
-const runBtn = document.getElementById('run');
-const formatBtn = document.getElementById('format');
-const sampleBtn = document.getElementById('sample');
-const status = document.getElementById('status');
-const iframeWrap = document.getElementById('iframeWrap');
+// Initialize CodeMirror editor
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Dynamically import CodeMirror modules
+        const [
+            { EditorView, basicSetup },
+            { EditorState },
+            { javascript },
+            { oneDark }
+        ] = await Promise.all([
+            import("https://cdn.skypack.dev/@codemirror/basic-setup"),
+            import("https://cdn.skypack.dev/@codemirror/state"),
+            import("https://cdn.skypack.dev/@codemirror/lang-javascript"),
+            import("https://cdn.skypack.dev/@codemirror/theme-one-dark")
+        ]);
+
+        // Initialize CodeMirror editor
+        let view = new EditorView({
+            state: EditorState.create({
+                doc: `// Write your React component here...
+export default function App() {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <div style={{ padding: '20px', fontFamily: 'system-ui' }}>
+      <h2>React Playground</h2>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(c => c + 1)}>
+        Increment
+      </button>
+    </div>
+  );
+}`,
+                extensions: [
+                    basicSetup,
+                    javascript({ jsx: true }),
+                    oneDark,
+                    EditorView.lineWrapping,
+                    EditorState.tabSize.of(2),
+                    EditorView.theme({
+                        "&": { height: "300px" },
+                        ".cm-scroller": { overflow: "auto" }
+                    })
+                ]
+            }),
+            parent: document.getElementById("editor")
+        });
+
+        // Make editor instance available globally
+        window.editor = view;
 
 // Format code using Prettier
 function formatCode() {
