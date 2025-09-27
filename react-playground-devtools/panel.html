@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>React Playground</title>
+  <style>
+    body { font-family: sans-serif; margin: 8px; }
+    #editor { width: 100%; height: 240px; font-family: monospace; }
+    #controls { margin-top: 8px; display:flex; gap:8px; align-items:center; }
+    #status { margin-left: 12px; color:#333; }
+    #iframeWrap { margin-top: 12px; border:1px solid #ddd; height: 320px; }
+  </style>
+</head>
+<body>
+  <h3>React Playground (DevTools)</h3>
+  <textarea id="editor" spellcheck="false"></textarea>
+  <div id="controls">
+    <button id="run">Run</button>
+    <button id="sample">Insert Sample</button>
+    <span id="status"></span>
+  </div>
+
+  <div id="iframeWrap">
+    <!-- sandboxed iframe will be created programmatically -->
+  </div>
+
+  <!-- Script loader with fallback -->
+  <script>
+    function loadScript(localPath, cdnPath) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.onload = resolve;
+        script.onerror = () => {
+          console.log(`Local ${localPath} failed, trying CDN...`);
+          script.src = cdnPath;
+          script.onerror = reject;
+        };
+        script.src = localPath;
+        document.body.appendChild(script);
+      });
+    }
+
+    // Load dependencies with fallback to CDN
+    Promise.all([
+      loadScript('vendor/babel.min.js', 'https://unpkg.com/@babel/standalone/babel.min.js'),
+      loadScript('vendor/react.development.js', 'https://unpkg.com/react@latest/umd/react.development.js'),
+      loadScript('vendor/react-dom.development.js', 'https://unpkg.com/react-dom@latest/umd/react-dom.development.js')
+    ]).then(() => {
+      // Load panel.js after dependencies are loaded
+      const script = document.createElement('script');
+      script.src = 'panel.js';
+      document.body.appendChild(script);
+    }).catch(err => {
+      console.error('Failed to load dependencies:', err);
+    });
+  </script>
+</body>
+</html>
